@@ -1,0 +1,33 @@
+{
+    "name": "ndnam90/laravel-settings",
+    "description": "Database configurations for Laravel 5",
+    "type": "laravel-package",
+    "require": {
+        "php": "^7.0",
+        "illuminate/support": "^5.4",
+        "illuminate/database": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Potato\\Settings\\": "src/"
+        },
+        "files": [
+            "src/Helpers.php"
+        ]
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ndnam90",
+            "email": "ndnam90@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Potato\\Settings\\SettingServiceProvider"
+            ]
+        }
+    }
+}
