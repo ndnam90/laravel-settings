@@ -3,6 +3,8 @@
 namespace Potato\Settings;
 
 
+use Illuminate\Support\Facades\Cache;
+
 class Setting
 {
     /**
@@ -26,10 +28,18 @@ class Setting
      */
     public function set(string $key, string $value)
     {
-        return $this->model->updateOrCreate(
-            ['setting_key' => $key],
+        $setting = $this->model->updateOrCreate(
+            ['setting_key'   => $key],
             ['setting_value' => $value]
         );
+
+        if(Cache::has($key)) {
+            Cache::forget($key);
+        }
+
+        Cache::forever($key, $value);
+
+        return $setting;
     }
 
     /**
@@ -38,12 +48,16 @@ class Setting
      */
     public function get($key)
     {
-        $setting = $this->model->whereSettingKey($key)->first();
+        if(Cache::has($key)) {
+            return Cache::get($key);
+        } else {
+            $setting = $this->model->whereSettingKey($key)->first();
 
-        if ($setting) {
-            return $setting->getAttribute('setting_value');
+            if($setting) {
+                return $setting->getAttribute('setting_value');
+            }
+
+            return null;
         }
-
-        return null;
     }
 }
